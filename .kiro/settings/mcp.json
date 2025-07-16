@@ -1,27 +1,22 @@
 {
   "mcpServers": {
     "fetch": {
-      "command": "uvx",
+      "command": "C:\\Users\\Almir Hrvanovic\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uvx.exe",
       "args": ["mcp-server-fetch"],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "disabled": false,
       "autoApprove": [
-        "fetch"
+        "mcp_fetch_fetch"
       ]
     },
-    "context7": {
-      "command": "uvx",
-      "args": ["context7-mcp-server"],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
+    "Context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {},
       "disabled": false,
-      "autoApprove": [
-        "search_web",
-        "get_page_content"
-      ]
+      "autoApprove": []
     }
   }
 }
