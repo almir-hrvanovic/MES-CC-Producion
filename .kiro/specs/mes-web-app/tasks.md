@@ -6,6 +6,7 @@
 
 
 
+
   - Create backend directory structure with app, models, schemas, api, services folders
   - Set up virtual environment and install core dependencies (FastAPI, SQLAlchemy, psycopg2)
   - Configure development environment with hot reload and debugging

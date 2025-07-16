@@ -1,23 +1,19 @@
-# GS-WS-PLAN Project Structure
+# Legacy Analysis - Original VBA System Structure
 
 ## Overview
-Manufacturing Execution System (MES) for production planning and scheduling, transitioning from Excel VBA to web application.
+This folder contains the complete analysis of the original Excel VBA-based production planning system, preserved for reference during the transition to the modern web application.
 
 ## Directory Structure
 
 ```
-GS-WS-PLAN/
-├── .kiro/                          # Kiro AI configuration
-│   └── steering/                   # AI steering rules
-│       └── vba-coding-standards.md
-│
+legacy-analysis/
 ├── Draft/                          # Working drafts and prototypes
 │   ├── Mladen/                     # User-specific drafts
 │   ├── excel schema.xlsx           # Database schema design
 │   ├── Plan_1.xlsm                # Planning workbook v1
 │   └── Plan_2.xlsm                # Planning workbook v2
 │
-├── excel_code/                     # VBA source code (current system)
+├── excel_code/                     # VBA source code (original system)
 │   ├── Azuriraj_crteze.bas        # Update drawings module
 │   ├── Azuriraj_plan_novi.bas     # Main scheduling algorithm
 │   ├── Azuriraj_plan_stari.bas    # Legacy scheduling module
@@ -35,13 +31,15 @@ GS-WS-PLAN/
 │   └── verify_db.py               # Database verification tool
 │
 ├── RawData/                        # Source data and databases
-│   ├── query.xlsx                 # Original Excel data export
-│   └── queryX.db                  # SQLite database (4,706 operations)
+│   ├── query.xlsx                 # Original Excel data export (4,706 operations)
+│   └── queryX.db                  # SQLite database for analysis
 │
-├── Suggestions/                    # Documentation and recommendations
+├── Suggestions/                    # Analysis and recommendations
 │   ├── data-structure-analysis.md # Database structure analysis
 │   ├── optimization-suggestions.md# Performance optimization ideas
-│   └── web-app-architecture.md    # Web application design
+│   ├── web-app-architecture.md    # Web application design
+│   ├── technology-stack-decision.md# Technology choices
+│   └── database-design-enterprise.md# Enterprise database design
 │
 └── PROJECT-STRUCTURE.md           # This file
 ```
