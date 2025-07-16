@@ -3,6 +3,8 @@
 ## Phase 1: Backend Foundation & Database Setup
 
 - [ ] 1. Set up FastAPI project structure and development environment
+
+
   - Create backend directory structure with app, models, schemas, api, services folders
   - Set up virtual environment and install core dependencies (FastAPI, SQLAlchemy, psycopg2)
   - Configure development environment with hot reload and debugging
