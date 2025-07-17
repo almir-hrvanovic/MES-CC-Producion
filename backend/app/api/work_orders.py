@@ -4,11 +4,9 @@ Work Orders API endpoints
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
-from sqlalchemy.orm import selectinload
 
 from app.database.connection import get_db
-from app.database.models import WorkOrder, Product, Operation
+from app.services.work_order_service import WorkOrderService
 from app.schemas.work_order import (
     WorkOrderCreate, 
     WorkOrderUpdate, 
@@ -31,60 +29,45 @@ async def get_work_orders(
 ):
     """Get list of work orders with filtering options"""
     
-    # Build query
-    query = select(WorkOrder, Product.name.label("product_name"), Product.kpl.label("product_kpl"))\
-        .join(Product, WorkOrder.product_id == Product.id)
+    service = WorkOrderService(db)
     
-    # Apply filters
-    if work_center:
-        # Filter by work center through operations
-        query = query.join(Operation, WorkOrder.id == Operation.work_order_id)\
-            .join(WorkCenter, Operation.work_center_id == WorkCenter.id)\
-            .where(WorkCenter.code == work_center)
-    
-    if status:
-        query = query.where(WorkOrder.status == status)
-    
-    if urgent_only:
-        query = query.where(WorkOrder.priority_level > 0)
-    
-    # Get total count
-    count_query = select(func.count()).select_from(query.subquery())
-    total_count = await db.scalar(count_query)
-    
-    # Apply pagination and execute
-    query = query.offset(offset).limit(limit)
-    result = await db.execute(query)
-    rows = result.all()
-    
-    # Format response
-    work_orders = []
-    for row in rows:
-        work_order = WorkOrderWithProduct(
-            id=row.WorkOrder.id,
-            rn=row.WorkOrder.rn,
-            product_id=row.WorkOrder.product_id,
-            quantity=row.WorkOrder.quantity,
-            priority_level=row.WorkOrder.priority_level,
-            datum_isporuke=row.WorkOrder.datum_isporuke,
-            datum_sastavljanja=row.WorkOrder.datum_sastavljanja,
-            datum_treci=row.WorkOrder.datum_treci,
-            status=row.WorkOrder.status,
-            created_at=row.WorkOrder.created_at,
-            updated_at=row.WorkOrder.updated_at,
-            product_name=row.product_name,
-            product_kpl=row.product_kpl
+    try:
+        result = await service.get_work_orders_with_filters(
+            status=status,
+            work_center=work_center,
+            urgent_only=urgent_only,
+            skip=offset,
+            limit=limit
         )
-        work_orders.append(work_order)
-    
-    # Get work center stats (placeholder)
-    work_center_stats = {"SAV100": 0, "G1000": 0}  # TODO: Implement actual stats
-    
-    return WorkOrderListResponse(
-        work_orders=work_orders,
-        total_count=total_count or 0,
-        work_center_stats=work_center_stats
-    )
+        
+        # Format work orders for response
+        work_orders = []
+        for wo in result["work_orders"]:
+            work_order = WorkOrderWithProduct(
+                id=wo.id,
+                rn=wo.rn,
+                product_id=wo.product_id,
+                quantity=wo.quantity,
+                priority_level=wo.priority_level,
+                datum_isporuke=wo.datum_isporuke,
+                datum_sastavljanja=wo.datum_sastavljanja,
+                datum_treci=wo.datum_treci,
+                status=wo.status,
+                created_at=wo.created_at,
+                updated_at=wo.updated_at,
+                product_name=wo.product.name if wo.product else "",
+                product_kpl=wo.product.kpl if wo.product else ""
+            )
+            work_orders.append(work_order)
+        
+        return WorkOrderListResponse(
+            work_orders=work_orders,
+            total_count=result["total_count"],
+            work_center_stats=result["work_center_stats"]
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/", response_model=WorkOrderResponse)
@@ -94,25 +77,22 @@ async def create_work_order(
 ):
     """Create a new work order"""
     
-    # Check if product exists
-    product_query = select(Product).where(Product.id == work_order.product_id)
-    product = await db.scalar(product_query)
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
+    service = WorkOrderService(db)
     
-    # Check if RN already exists
-    existing_query = select(WorkOrder).where(WorkOrder.rn == work_order.rn)
-    existing = await db.scalar(existing_query)
-    if existing:
-        raise HTTPException(status_code=400, detail="Work order RN already exists")
-    
-    # Create work order
-    db_work_order = WorkOrder(**work_order.model_dump())
-    db.add(db_work_order)
-    await db.commit()
-    await db.refresh(db_work_order)
-    
-    return WorkOrderResponse.model_validate(db_work_order)
+    try:
+        # Validate work order data
+        validation_errors = await service.validate_work_order_data(work_order)
+        if validation_errors:
+            raise HTTPException(status_code=400, detail={"errors": validation_errors})
+        
+        # Create work order
+        created_work_order = await service.create_work_order(work_order)
+        return created_work_order
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/{work_order_id}", response_model=WorkOrderResponse)
@@ -122,13 +102,13 @@ async def get_work_order(
 ):
     """Get a specific work order by ID"""
     
-    query = select(WorkOrder).where(WorkOrder.id == work_order_id)
-    work_order = await db.scalar(query)
+    service = WorkOrderService(db)
     
+    work_order = await service.get_work_order(work_order_id)
     if not work_order:
         raise HTTPException(status_code=404, detail="Work order not found")
     
-    return WorkOrderResponse.model_validate(work_order)
+    return work_order
 
 
 @router.patch("/{work_order_id}/status")
