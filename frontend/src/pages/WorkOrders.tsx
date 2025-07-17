@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { useWorkOrders, useDeleteWorkOrder, useUpdateWorkOrderStatus } from '../hooks/useWorkOrders';
+import { type WorkOrder } from '../lib/api';
 
 export default function WorkOrders() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +42,7 @@ export default function WorkOrders() {
     }
   };
 
-  const filteredWorkOrders = workOrders.filter(order => {
+  const filteredWorkOrders = workOrders.filter((order: WorkOrder) => {
     const matchesSearch = order.rn.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.product_kpl.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          order.product_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -158,7 +159,7 @@ export default function WorkOrders() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredWorkOrders.map((order) => (
+            {filteredWorkOrders.map((order: WorkOrder) => (
               <tr key={order.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{order.rn}</div>

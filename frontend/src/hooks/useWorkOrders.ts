@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { workOrdersApi, type WorkOrder, type WorkOrdersResponse } from '../lib/api';
+import { workOrdersApi, type WorkOrder } from '../lib/api';
 
 export const useWorkOrders = (params?: { work_center?: string; status?: string; urgent_only?: boolean }) => {
   return useQuery({

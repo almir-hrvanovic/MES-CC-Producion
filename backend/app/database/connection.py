@@ -9,8 +9,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """Application settings"""
-    database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/mes_production"
-    database_url_sync: str = "postgresql://postgres:password@localhost:5432/mes_production"
+    database_url: str = "postgresql+asyncpg://postgres:password@192.168.1.25:5432/mes_production"
+    database_url_sync: str = "postgresql://postgres:password@192.168.1.25:5432/mes_production"
     
     class Config:
         env_file = ".env"

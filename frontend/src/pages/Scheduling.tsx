@@ -106,8 +106,8 @@ export default function Scheduling() {
   const scheduleItems: ScheduleItem[] = (scheduleData?.operations || []).map((op: any) => ({
     id: op.id.toString(),
     workOrderRn: op.work_order.rn,
-    productKpl: op.work_order.product.kpl,
-    productName: op.work_order.product.name,
+    productKpl: op.work_order.product_kpl,
+    productName: op.work_order.product_name,
     operation: op.naziv,
     estimatedTime: op.norma || 0,
     priority: op.work_order.priority_level,

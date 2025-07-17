@@ -1,6 +1,7 @@
 import { Activity, TrendingUp, Clock, AlertCircle, Loader2 } from 'lucide-react';
 import { useWorkOrders } from '../hooks/useWorkOrders';
 import { useMachines } from '../hooks/useMachines';
+import { type WorkOrder, type WorkCenter } from '../lib/api';
 
 export default function Dashboard() {
   const { data: workOrdersData, isLoading: workOrdersLoading } = useWorkOrders();
@@ -10,13 +11,13 @@ export default function Dashboard() {
   const machines = machinesData || [];
 
   // Calculate statistics
-  const activeWorkOrders = workOrders.filter(wo => wo.status === 'in_progress').length;
-  const completedToday = workOrders.filter(wo => {
+  const activeWorkOrders = workOrders.filter((wo: WorkOrder) => wo.status === 'in_progress').length;
+  const completedToday = workOrders.filter((wo: WorkOrder) => {
     const today = new Date().toISOString().split('T')[0];
     return wo.status === 'completed' && wo.updated_at.startsWith(today);
   }).length;
-  const pendingWorkOrders = workOrders.filter(wo => wo.status === 'pending').length;
-  const urgentWorkOrders = workOrders.filter(wo => wo.priority_level === 1).length;
+  const pendingWorkOrders = workOrders.filter((wo: WorkOrder) => wo.status === 'pending').length;
+  const urgentWorkOrders = workOrders.filter((wo: WorkOrder) => wo.priority_level === 1).length;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -32,7 +33,7 @@ export default function Dashboard() {
   };
 
   const recentWorkOrders = workOrders
-    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+    .sort((a: WorkOrder, b: WorkOrder) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
     .slice(0, 5);
 
   if (workOrdersLoading || machinesLoading) {
@@ -113,7 +114,7 @@ export default function Dashboard() {
           <div className="p-6">
             <div className="space-y-4">
               {recentWorkOrders.length > 0 ? (
-                recentWorkOrders.map((order) => (
+                recentWorkOrders.map((order: WorkOrder) => (
                   <div key={order.id} className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-gray-900">{order.rn}</p>
@@ -139,7 +140,7 @@ export default function Dashboard() {
           <div className="p-6">
             <div className="space-y-4">
               {machines.length > 0 ? (
-                machines.map((machine) => (
+                machines.map((machine: WorkCenter) => (
                   <div key={machine.id} className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-gray-900">{machine.code} - {machine.name}</p>

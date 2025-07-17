@@ -1,5 +1,6 @@
 import { Activity, Clock, AlertTriangle, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { useMachines, useUpdateMachineStatus } from '../hooks/useMachines';
+import { type WorkCenter } from '../lib/api';
 
 export default function Machines() {
   const { data: machinesData, isLoading, error } = useMachines();
@@ -39,7 +40,7 @@ export default function Machines() {
     return 'bg-red-500';
   };
 
-  const getUtilizationRate = (machine: any) => {
+  const getUtilizationRate = (_machine: WorkCenter) => {
     // Calculate utilization rate based on machine data
     // For now, return a mock value since we don't have real utilization data
     return Math.floor(Math.random() * 40) + 60; // Random between 60-100%
@@ -85,7 +86,7 @@ export default function Machines() {
 
       {/* Work Centers Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {machines.map((machine) => {
+        {machines.map((machine: WorkCenter) => {
           const utilizationRate = getUtilizationRate(machine);
           const operationsCount = Math.floor(Math.random() * 20) + 5; // Mock operations count
           const avgSetupTime = machine.setup_time_minutes;
@@ -183,7 +184,7 @@ export default function Machines() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Active Centers</p>
               <p className="text-2xl font-bold text-gray-900">
-                {machines.filter(m => m.is_active).length}
+                {machines.filter((m: WorkCenter) => m.is_active).length}
               </p>
             </div>
           </div>
@@ -212,7 +213,7 @@ export default function Machines() {
               <p className="text-sm font-medium text-gray-600">Avg Capacity</p>
               <p className="text-2xl font-bold text-gray-900">
                 {machines.length > 0 
-                  ? Math.round(machines.reduce((sum, m) => sum + m.capacity_hours_per_day, 0) / machines.length)
+                  ? Math.round(machines.reduce((sum: number, m: WorkCenter) => sum + m.capacity_hours_per_day, 0) / machines.length)
                   : 0}h
               </p>
             </div>
