@@ -189,7 +189,7 @@ export default function WorkOrders() {
                   </select>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {new Date(order.datum_isporuke).toLocaleDateString()}
+                  {order.datum_isporuke ? new Date(order.datum_isporuke).toLocaleDateString() : 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
