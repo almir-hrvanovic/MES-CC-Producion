@@ -136,3 +136,7 @@ Setup guide: `MCP_SETUP.md`
 ## Development Notes
 - Always use descriptive variable names
 - Local network setup documented in `homenetwork.md`
+
+## Project Build and Development
+
+- Build this project using claude-code sdk

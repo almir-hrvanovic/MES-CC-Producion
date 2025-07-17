@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2025.7.1",
+    "@mokei/mcp-fetch": "^0.4.0",
+    "@upstash/context7-mcp": "^1.0.14"
+  }
+}

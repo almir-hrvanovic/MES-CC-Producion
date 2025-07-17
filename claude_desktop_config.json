@@ -39,14 +39,14 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-fetch"
+        "@mokei/mcp-fetch"
       ]
     },
     "context7": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-context7"
+        "@upstash/context7-mcp"
       ]
     }
   }
