@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://almir:numipipdeedee@192.168.1.25:5432/mes_production"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Almir Hrvanovic\\OneDrive\\almir.hrvanovic.onedrive\\OneDrive\\Presloziti_02\\Documents\\__ Projekti\\mes-production-scheduler"
+      ]
+    },
+    "web-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-web-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "your-brave-api-key-here"
+      }
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "C:\\Users\\Almir Hrvanovic\\OneDrive\\almir.hrvanovic.onedrive\\OneDrive\\Presloziti_02\\Documents\\__ Projekti\\mes-production-scheduler"
+      ]
+    },
+    "fetch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-context7"
+      ]
+    }
+  }
+}

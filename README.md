@@ -53,9 +53,16 @@ python -m venv venv
 venv\Scripts\activate  # Windows
 pip install -r requirements.txt
 cp .env.example .env
-# Edit .env with your database credentials
+# Database already configured for network server at 192.168.1.25
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+### Network Infrastructure
+- **Database Server**: MacBook Ubuntu 22.04 at `192.168.1.25:5432`
+- **Web Server**: Nginx at `http://192.168.1.25`
+- **Connection**: PostgreSQL user `almir` with CREATEDB privileges
+- **Network**: 1 Gbps via TP-Link LS1005G Switch
+- **Additional Services**: Neo4j (7474), RabbitMQ (5672)
 
 ### Frontend Setup (Coming Soon)
 ```bash
